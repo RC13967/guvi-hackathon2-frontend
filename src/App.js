@@ -105,10 +105,10 @@ return
 
   function deletehall(username,id) {
     fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/hall/${username}/${id}`, {
-      method: "DELETE",
+      method: "GET",
     })
       .then((data) => data.json())
-      .then(() => getusers());
+      .then((data) => console.log(data));
   }
 }
 
