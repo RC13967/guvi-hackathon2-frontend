@@ -94,7 +94,7 @@ function Crudtheatre() {
       <div className="movie-title">{title}</div>
       <div className="hall-adress">{adress}</div>
       <button onClick = {()=>edithall(adress, hallname,title,id)}>Edit hall</button>
-      <button onClick = {()=>deletehall(hallname,username)}>Delete hall</button>
+      <button onClick = {()=>deletehall(username,id)}>Delete hall</button>
     </div>
     )} 
     </div>
@@ -103,8 +103,8 @@ function Crudtheatre() {
 return
   }
 
-  function deletehall(username,hallname) {
-    fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/hall/${username}/${hallname}`, {
+  function deletehall(username,hallId) {
+    fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/hall/${username}/${hallId}`, {
       method: "DELETE",
     })
       .then((data) => data.json())
