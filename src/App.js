@@ -1,5 +1,5 @@
 import './App.css';
-import { Link, Route, Switch, Redirect, useParams } from "react-router-dom";
+import { Link, Route, Switch,  useParams } from "react-router-dom";
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 const moviescontext = createContext(null);
@@ -78,7 +78,7 @@ function Crudtheatre() {
   }
   useEffect(() => {
     getusers();
-  }, []);
+  }, );
   
   function handleData(userdata){
     const myData = {
@@ -132,13 +132,13 @@ function Client() {
   }
   useEffect(() => {
     getmovies();
-  }, []);
+  }, );
 
   return (
     <div className="movies-container" >
       {movies.map(({ poster, title, genres }) =>
         <div className="movie-card" >
-          <img src={poster} />
+          <img src={poster} alt = ""/>
           <div className="movie-title">{title}</div>
           <div className="movie-genre">{genres}</div>
           <button className="pointer" onClick={() => history.push("/book/" + title)}>Book</button>
