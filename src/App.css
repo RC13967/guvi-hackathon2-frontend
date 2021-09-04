@@ -27,7 +27,7 @@ img {
   border-radius: 8px;
 }
 .halls-container{
-  margin: 1rem;
+  margin: auto;
   display: flex;
   flex-direction: column;
   width: fit-content;

@@ -67,45 +67,34 @@ function Admin() {
 }
 function Crudtheatre() {
   const [user, setUser] = useState([]);
-  const { username, password } = useContext(moviescontext);
+  const { username, password} = useContext(moviescontext);
   function getusers(){
     fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/users/${username}`, {
       method: "GET"
     })
       .then((data) => data.json())
-      .then((userdata)=> handleData(userdata));
+      .then((userdata)=> setUser(userdata));
   }
   useEffect(() => {
     getusers();
-  }, );
-  
-  function handleData(userdata){
-    const myData = {
-      data: userdata,
-    };
-    setUser([...user, myData]);
-  };
-  let halls = [];
-  if(user[0] === undefined || user[0].data[0] === undefined || user[0].data[0].password !== password){
+  }, []);
+  if(user[0] === undefined || user[0].halls === undefined || password !== user[0].password){
     return(
       <>
       Invalid credentials
       </>
     )
   }
-  let hallsObject = user.map((obj)=>obj.data[0].halls);
-  for(let hallkey in hallsObject[0]){
-  halls.push(hallsObject[0][hallkey])
-  }
+  
   return(
     <div className="halls-container">
-    {halls.map(({adress, hallname, title})=>
+    {user[0].halls.map(({adress, hallname, title})=>
     <div className="hall-container">
       <div className="hall-name">{hallname}</div>
       <div className="movie-title">{title}</div>
       <div className="hall-adress">{adress}</div>
-      <button onclick = {()=>edithall(hallname)}>Edit hall</button>
-      <button onclick = {()=>deletehall(hallname)}>Delete hall</button>
+      <button onClick = {()=>edithall(hallname)}>Edit hall</button>
+      <button onClick = {()=>deletehall(hallname)}>Delete hall</button>
     </div>
     )} 
     </div>
@@ -113,9 +102,14 @@ function Crudtheatre() {
   function edithall(hallname){
 return
   }
-  function deletehall(hallname){
-    return 
-    
+
+  function deletehall(hallname) {
+    return
+    // fetch(`https://6121377ff5849d0017fb41c6.mockapi.io/users/${id}`, {
+    //   method: "DELETE"
+    // })
+    //   .then((data) => data.json())
+    //   .then(() => getusers());
   }
 }
 
