@@ -70,7 +70,7 @@ function Crudtheatre() {
   const [user, setUser] = useState([]);
   const { username, password } = useContext(moviescontext);
   function getusers(){
-    fetch(`http://localhost:4000/users/${username}`, {
+    fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/users/${username}`, {
       method: "GET"
     })
       .then((data) => data.json())
@@ -124,7 +124,7 @@ function Client() {
   const history = useHistory();
   const { movies, setMovies } = useContext(moviescontext);
   function getmovies() {
-    fetch("http://localhost:4000/movies", {
+    fetch("https://guvi-hackathon2-ranjith.herokuapp.com/movies", {
       method: "GET"
     })
       .then((data) => data.json())
