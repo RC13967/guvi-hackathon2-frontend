@@ -104,9 +104,8 @@ return
   }
 
   function deletehall(adress, hallname, title,id) {
-    fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/halls`, {
+    fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/halls/${hallname}/${id}/${adress}/${title}`, {
       method: "DELETE",
-      body: JSON.stringify({ adress: adress, hallname:hallname,title:title,id:id })
     })
       .then((data) => data.json())
       .then(() => getusers());
