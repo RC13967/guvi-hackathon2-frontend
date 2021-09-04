@@ -88,13 +88,13 @@ function Crudtheatre() {
   
   return(
     <div className="halls-container">
-    {user[0].halls.map(({adress, hallname, title})=>
+    {user[0].halls.map(({adress, hallname, title,id})=>
     <div className="hall-container">
       <div className="hall-name">{hallname}</div>
       <div className="movie-title">{title}</div>
       <div className="hall-adress">{adress}</div>
-      <button onClick = {()=>edithall(hallname)}>Edit hall</button>
-      <button onClick = {()=>deletehall(hallname)}>Delete hall</button>
+      <button onClick = {()=>edithall(adress, hallname,title,id)}>Edit hall</button>
+      <button onClick = {()=>deletehall(adress, hallname,title,id)}>Delete hall</button>
     </div>
     )} 
     </div>
@@ -103,13 +103,13 @@ function Crudtheatre() {
 return
   }
 
-  function deletehall(hallname) {
-    return
-    // fetch(`https://6121377ff5849d0017fb41c6.mockapi.io/users/${id}`, {
-    //   method: "DELETE"
-    // })
-    //   .then((data) => data.json())
-    //   .then(() => getusers());
+  function deletehall(adress, hallname, title,id) {
+    fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/halls`, {
+      method: "DELETE",
+      body: JSON.stringify({ adress: adress, hallname:hallname,title:title,id:id })
+    })
+      .then((data) => data.json())
+      .then(() => getusers());
   }
 }
 
