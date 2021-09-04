@@ -103,8 +103,8 @@ function Crudtheatre() {
 return
   }
 
-  function deletehall(username,hallId) {
-    fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/hall/${username}/${hallId}`, {
+  function deletehall(username,id) {
+    fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/hall/${username}/${id}`, {
       method: "DELETE",
     })
       .then((data) => data.json())
