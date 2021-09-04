@@ -59,8 +59,7 @@ function Admin() {
     <>
       <input type="text" placeholder="user name ..." onChange={(event) => setUsername(event.target.value)} />
       <input type="text" placeholder="password ..." onChange={(event) => setPassword(event.target.value)} />
-
-      <Link to="crudtheatre"><button className="pointer">Upload movie</button></Link>
+      <Link to="crudtheatre"><button className="pointer">Login</button></Link>
 
     </>
   )
