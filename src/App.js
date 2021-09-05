@@ -78,6 +78,7 @@ function Admin() {
 
 }
 function Crudtheatre() {
+  const [newHallId, setnewHallId] = useState(0);
   const history = useHistory();
   const { username, password, user, setUser, 
     newHallname, setnewHallname, newTitle, setnewTitle, newAdress, setnewAdress } = useContext(moviescontext);
@@ -99,7 +100,7 @@ function Crudtheatre() {
     )
   }
 let maxHallId = Math.max(user[0].halls.map((hall)=>hall.id));
-const [newHallId, setnewHallId] = useState(maxHallId);
+setnewHallId(maxHallId);
   return (
     <>
       <input type="text" placeholder={newHallname} onChange={(event) => setnewHallname(event.target.value)} />
