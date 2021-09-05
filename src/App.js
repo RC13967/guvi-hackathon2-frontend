@@ -119,7 +119,7 @@ function Crudtheatre() {
 }
 
 function Edithall() {
-  const { user } = useContext(moviescontext);
+  const { user, username } = useContext(moviescontext);
   const { id } = useParams();
   let [{ adress, hallname, title }] = user[0].halls.filter((hall) => hall.id === id);
   const [Adress, setAdress] = useState(adress);
@@ -131,7 +131,7 @@ function Edithall() {
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ hallname: Hallname, adress: Adress, title: Title })
+    body: JSON.stringify({ hallname: Hallname, adress: Adress, title: Title, username:username })
   })
     .then((data) => data.json())
 
