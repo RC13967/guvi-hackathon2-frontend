@@ -99,14 +99,12 @@ function Crudtheatre() {
       </>
     )
   }
-let maxHallId = Math.max(user[0].halls.map((hall)=>hall.id));
-setnewHallId(maxHallId);
   return (
     <>
-      <input type="text" placeholder={newHallname} onChange={(event) => setnewHallname(event.target.value)} />
-      <input type="text" placeholder={newTitle} onChange={(event) => setnewTitle(event.target.value)} />
-      <input type="text" placeholder={newAdress} onChange={(event) => setnewAdress(event.target.value)} />
-      <button onClick={() => { setnewHallId(newHallId + 1);
+      <input type="text" placeholder= "Hall name" onChange={(event) => setnewHallname(event.target.value)} />
+      <input type="text" placeholder= "Running movie name" onChange={(event) => setnewTitle(event.target.value)} />
+      <input type="text" placeholder= "Address of the hall" onChange={(event) => setnewAdress(event.target.value)} />
+      <button onClick={() => { setnewHallId(Math.max(user[0].halls.map((hall)=>hall.id)) + 1);
         history.push("/createhall/" + newHallId)}}>Add Hall</button>
       <div className="halls-container">
         {user[0].halls.map(({ adress, hallname, title, id }) =>
