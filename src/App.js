@@ -101,7 +101,7 @@ function Crudtheatre() {
           <div className="hall-name">{hallname}</div>
           <div className="movie-title">{title}</div>
           <div className="hall-adress">{adress}</div>
-          <button onClick={() => history.push("edithall" + id)}>Edit hall</button>
+          <button onClick={() => history.push("/edithall/" + id)}>Edit hall</button>
           <button onClick={() => deletehall(id)}>Delete hall</button>
         </div>
       )}
