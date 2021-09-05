@@ -103,7 +103,7 @@ function Crudtheatre() {
       <input type="text" placeholder= "Hall name" onChange={(event) => setnewHallname(event.target.value)} />
       <input type="text" placeholder= "Running movie name" onChange={(event) => setnewTitle(event.target.value)} />
       <input type="text" placeholder= "Address of the hall" onChange={(event) => setnewAdress(event.target.value)} />
-      <button onClick={() => { setnewHallId(parseInt(Math.max(user[0].halls.map((hall)=>hall.id))) + 1);
+      <button onClick={() => { setnewHallId(Math.max(...user[0].halls.map((hall)=> +hall.id)) + 1 );
         history.push("/createhall/" + newHallId)}}>Add Hall</button>
       <div className="halls-container">
         {user[0].halls.map(({ adress, hallname, title, id }) =>
@@ -169,8 +169,9 @@ function Createhall() {
     body: JSON.stringify({ hallname: newHallname, adress: newAdress, title: newTitle, username: username })
   })
     .then((data) => data.json())
-
-
+    return(
+      <Link to = "/crudtheatre">Hall list</Link>
+    )
 }
 function Client() {
   const history = useHistory();
