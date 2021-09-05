@@ -23,6 +23,7 @@ function App() {
 function Routes() {
   const [user,setUser] = useState([]);
   return (
+    <usercontext.Provider value={{user:user,setUser:setUser}} >
     <Switch>
       <Route path="/admin">
         <Admin />
@@ -34,9 +35,7 @@ function Routes() {
         <Bookticket />
       </Route>
       <Route path="/crudtheatre">
-        <usercontext.Provider value={{user:user,setUser:setUser}} >
         <Crudtheatre />
-        </usercontext.Provider>
       </Route>
       <Route path="/edithall/:id">
         <Edithall />
@@ -45,6 +44,7 @@ function Routes() {
         <Home />
       </Route>
     </Switch>
+    </usercontext.Provider>
   )
 }
 function Home() {
