@@ -8,12 +8,16 @@ function App() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState([]);
+  const [newAdress, setnewAdress] = useState("");
+  const [newTitle, setnewTitle] = useState("");
+  const [newHallname, setnewHallname] = useState("");
   return (
     <>
       <moviescontext.Provider value={{
         movies: movies, setMovies: setMovies,
         username: username, setUsername: setUsername, password: password, setPassword: setPassword,
-        user: user, setUser: setUser
+        user: user, setUser: setUser, newAdress: newAdress, newHallname: newHallname, newTitle: newTitle,
+        setnewAdress: setnewAdress, setnewHallname: setnewHallname, setnewTitle: setnewTitle
       }}>
         <Routes />
       </moviescontext.Provider>
@@ -38,6 +42,9 @@ function Routes() {
       </Route>
       <Route path="/edithall/:id">
         <Edithall />
+      </Route>
+      <Route path="/createhall/:id">
+        <Createhall />
       </Route>
       <Route path="/">
         <Home />
@@ -72,7 +79,8 @@ function Admin() {
 }
 function Crudtheatre() {
   const history = useHistory();
-  const { username, password,user, setUser } = useContext(moviescontext);
+  const { username, password, user, setUser, 
+    newHallname, setnewHallname, newTitle, setnewTitle, newAdress, setnewAdress } = useContext(moviescontext);
   function getusers() {
     fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/users/${username}`, {
       method: "GET"
@@ -90,19 +98,27 @@ function Crudtheatre() {
       </>
     )
   }
-
+let maxHallId = Math.max(user[0].halls.map((hall)=>hall.id));
+const [newHallId, setnewHallId] = useState(maxHallId);
   return (
-    <div className="halls-container">
-      {user[0].halls.map(({ adress, hallname, title, id }) =>
-        <div className="hall-container">
-          <div className="hall-name">{hallname}</div>
-          <div className="movie-title">{title}</div>
-          <div className="hall-adress">{adress}</div>
-          <button onClick={() => history.push("/edithall/" + id)}>Edit hall</button>
-          <button onClick={() => deletehall(id)}>Delete hall</button>
-        </div>
-      )}
-    </div>
+    <>
+      <input type="text" placeholder={newHallname} onChange={(event) => setnewHallname(event.target.value)} />
+      <input type="text" placeholder={newTitle} onChange={(event) => setnewTitle(event.target.value)} />
+      <input type="text" placeholder={newAdress} onChange={(event) => setnewAdress(event.target.value)} />
+      <button onClick={() => { setnewHallId(newHallId + 1);
+        history.push("/createhall/" + newHallId)}}>Add Hall</button>
+      <div className="halls-container">
+        {user[0].halls.map(({ adress, hallname, title, id }) =>
+          <div className="hall-container">
+            <div className="hall-name">{hallname}</div>
+            <div className="movie-title">{title}</div>
+            <div className="hall-adress">{adress}</div>
+            <button onClick={() => history.push("/edithall/" + id)}>Edit hall</button>
+            <button onClick={() => deletehall(id)}>Delete hall</button>
+          </div>
+        )}
+      </div>
+    </>
   )
 
   function deletehall(id) {
@@ -131,7 +147,7 @@ function Edithall() {
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ hallname: Hallname, adress: Adress, title: Title, username:username })
+    body: JSON.stringify({ hallname: Hallname, adress: Adress, title: Title, username: username })
   })
     .then((data) => data.json())
 
@@ -143,6 +159,20 @@ function Edithall() {
       <Link to="/crudtheatre">Updated list</Link>
     </div>
   )
+}
+function Createhall() {
+  const { username, newHallname,newAdress,newTitle } = useContext(moviescontext);
+  const { id } = useParams();
+  fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/edithall/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ hallname: newHallname, adress: newAdress, title: newTitle, username: username })
+  })
+    .then((data) => data.json())
+
+
 }
 function Client() {
   const history = useHistory();
