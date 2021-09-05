@@ -109,7 +109,7 @@ return
       headers: {
         "Content-Type": "application/json"
       },
-      body:JSON.stringify({username:username})
+      body: ({username:username})
     })
       .then((data) => data.json())
       .then(()=>getusers())
