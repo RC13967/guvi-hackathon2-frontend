@@ -3,16 +3,17 @@ import { Link, Route, Switch, useParams } from "react-router-dom";
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 const moviescontext = createContext(null);
-const usercontext = createContext(null);
 function App() {
   const [movies, setMovies] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [user, setUser] = useState([]);
   return (
     <>
       <moviescontext.Provider value={{
         movies: movies, setMovies: setMovies,
-        username: username, setUsername: setUsername, password: password, setPassword: setPassword
+        username: username, setUsername: setUsername, password: password, setPassword: setPassword,
+        user: user, setUser: setUser
       }}>
         <Routes />
       </moviescontext.Provider>
@@ -21,9 +22,7 @@ function App() {
   );
 }
 function Routes() {
-  const [user,setUser] = useState([]);
   return (
-    <usercontext.Provider value={{user:user,setUser:setUser}} >
     <Switch>
       <Route path="/admin">
         <Admin />
@@ -44,7 +43,6 @@ function Routes() {
         <Home />
       </Route>
     </Switch>
-    </usercontext.Provider>
   )
 }
 function Home() {
@@ -74,8 +72,7 @@ function Admin() {
 }
 function Crudtheatre() {
   const history = useHistory();
-  const {user, setUser} = useContext(usercontext);
-  const { username, password } = useContext(moviescontext);
+  const { username, password,user, setUser } = useContext(moviescontext);
   function getusers() {
     fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/users/${username}`, {
       method: "GET"
@@ -122,28 +119,28 @@ function Crudtheatre() {
 }
 
 function Edithall() {
-  const {user} = useContext(usercontext);
+  const { user } = useContext(moviescontext);
   const { id } = useParams();
   let [{ adress, hallname, title }] = user[0].halls.filter((hall) => hall.id === id);
   const [Adress, setAdress] = useState(adress);
   const [Title, setTitle] = useState(hallname);
   const [Hallname, setHallname] = useState(title);
-  
-    fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/edithall/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ hallname: Hallname, adress: Adress, title: Title })
-    })
-      .then((data) => data.json())
-  
+
+  fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/edithall/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ hallname: Hallname, adress: Adress, title: Title })
+  })
+    .then((data) => data.json())
+
   return (
     <div>
       <input type="text" placeholder={Hallname} onChange={(event) => setHallname(event.target.value)} />
       <input type="text" placeholder={Title} onChange={(event) => setTitle(event.target.value)} />
       <input type="text" placeholder={Adress} onChange={(event) => setAdress(event.target.value)} />
-      <Link to ="/crudtheatre">Updated list</Link>
+      <Link to="/crudtheatre">Updated list</Link>
     </div>
   )
 }
