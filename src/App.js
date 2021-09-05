@@ -155,6 +155,7 @@ function Edithall() {
       <input type="text" placeholder={Hallname} onChange={(event) => setHallname(event.target.value)} />
       <input type="text" placeholder={Title} onChange={(event) => setTitle(event.target.value)} />
       <input type="text" placeholder={Adress} onChange={(event) => setAdress(event.target.value)} />
+      <Link to ="/crudtheatre">Updated list</Link>
     </div>
   )
 }
