@@ -80,8 +80,7 @@ function Admin() {
 function Crudtheatre() {
   const [newHallId, setnewHallId] = useState(0);
   const history = useHistory();
-  const { username, password, user, setUser, 
-    newHallname, setnewHallname, newTitle, setnewTitle, newAdress, setnewAdress } = useContext(moviescontext);
+  const { username, password, user, setUser, setnewHallname, setnewTitle, setnewAdress } = useContext(moviescontext);
   function getusers() {
     fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/users/${username}`, {
       method: "GET"
@@ -104,7 +103,7 @@ function Crudtheatre() {
       <input type="text" placeholder= "Hall name" onChange={(event) => setnewHallname(event.target.value)} />
       <input type="text" placeholder= "Running movie name" onChange={(event) => setnewTitle(event.target.value)} />
       <input type="text" placeholder= "Address of the hall" onChange={(event) => setnewAdress(event.target.value)} />
-      <button onClick={() => { setnewHallId(Math.max(user[0].halls.map((hall)=>hall.id)) + 1);
+      <button onClick={() => { setnewHallId(parseInt(Math.max(user[0].halls.map((hall)=>hall.id))) + 1);
         history.push("/createhall/" + newHallId)}}>Add Hall</button>
       <div className="halls-container">
         {user[0].halls.map(({ adress, hallname, title, id }) =>
