@@ -122,14 +122,13 @@ function Crudtheatre() {
 }
 
 function Edithall() {
-  const {user, setUser} = useContext(usercontext);
-  const {username} = useContext(moviescontext);
+  const {user} = useContext(usercontext);
   const { id } = useParams();
   let [{ adress, hallname, title }] = user[0].halls.filter((hall) => hall.id === id);
   const [Adress, setAdress] = useState(adress);
   const [Title, setTitle] = useState(hallname);
   const [Hallname, setHallname] = useState(title);
-  function edithall() {
+  
     fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/edithall/${id}`, {
       method: "PUT",
       headers: {
@@ -138,18 +137,7 @@ function Edithall() {
       body: JSON.stringify({ hallname: Hallname, adress: Adress, title: Title })
     })
       .then((data) => data.json())
-      .then(() => getusers())
-  }
-  function getusers() {
-    fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/users/${username}`, {
-      method: "GET"
-    })
-      .then((data) => data.json())
-      .then((userdata) => setUser(userdata));
-  }
-  useEffect(() => {
-    edithall();
-  }, []);
+  
   return (
     <div>
       <input type="text" placeholder={Hallname} onChange={(event) => setHallname(event.target.value)} />
