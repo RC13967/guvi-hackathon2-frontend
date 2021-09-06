@@ -68,25 +68,39 @@ function Home() {
 function Admin() {
   const history = useHistory();
   const [buttonText, setButtonText] = useState("Login");
-  const { username, password, setUsername, setPassword, setUser } = useContext(moviescontext);
+  const { username, password, setUsername, setPassword, user, setUser } = useContext(moviescontext);
+  function getusers() {
+    fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/users/${username}`, {
+      method: "GET"
+    })
+      .then((data) => data.json())
+      .then((userdata) => setUser(userdata));
+  }
+  useEffect(() => {
+    getusers();
+  }, [username]);
   function adduser() {
     fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/addUser`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ username: username, password:password, halls:[] })
+      body: JSON.stringify({ username: username, password: password, halls: [] })
     })
       .then((data) => data.json())
       .then((userdata) => setUser(userdata))
-      .then(()=> history.push("/crudtheatre"))
+      .then(() => history.push("/crudtheatre"))
   }
   return (
     <>
       <input type="text" placeholder="user name ..." onChange={(event) => setUsername(event.target.value)} />
+      <div>
+        {user[0] !== undefined && user[0].username === username && buttonText === "sign up" ? "user already exists" : ""}
+      </div>
       <input type="text" placeholder="password ..." onChange={(event) => setPassword(event.target.value)} />
-      <button className="pointer" onClick={() =>  
-        buttonText === "Login" ? history.push("/crudtheatre") : adduser()  }>
+      <button className="pointer" onClick={() =>
+        buttonText === "Login" ? history.push("/crudtheatre") :
+        user[0] !== undefined && user[0].username === username ? adduser() : ""}>
         {buttonText}</button>
       <div>{buttonText === "Login" ? "New user ?" : "Already existing user ?"}</div>
       <div onClick={() => setButtonText(buttonText === "Login" ? "sign up" : "Login")}>
@@ -114,27 +128,27 @@ function Crudtheatre() {
   }, []);
   return (
     <>
-    {(user[0] === undefined || user[0].username !== username || password !== user[0].password)
-    ?"Invalid credentials" :<>
-      <input type="text" placeholder="Hall name" onChange={(event) => setnewHallname(event.target.value)} />
-      <input type="text" placeholder="Running movie name" onChange={(event) => setnewTitle(event.target.value)} />
-      <input type="text" placeholder="Address of the hall" onChange={(event) => setnewAdress(event.target.value)} />
-      <button onClick={() => {
-        setnewHallId(Math.max(...user[0].halls.map((hall) => +hall.id)) + 1);
-        history.push("/createhall/" + newHallId)
-      }}>Add Hall</button>
-      <div className="halls-container">
-        {user[0].halls.map(({ adress, hallname, title, id }) =>
-          <div className="hall-container">
-            <div className="hall-name">{hallname}</div>
-            <div className="movie-title">{title}</div>
-            <div className="hall-adress">{adress}</div>
-            <button onClick={() => history.push("/edithall/" + id)}>Edit hall</button>
-            <button onClick={() => deletehall(id)}>Delete hall</button>
+      {(user[0] === undefined || user[0].username !== username || password !== user[0].password)
+        ? "Invalid credentials" : <>
+          <input type="text" placeholder="Hall name" onChange={(event) => setnewHallname(event.target.value)} />
+          <input type="text" placeholder="Running movie name" onChange={(event) => setnewTitle(event.target.value)} />
+          <input type="text" placeholder="Address of the hall" onChange={(event) => setnewAdress(event.target.value)} />
+          <button onClick={() => {
+            setnewHallId(Math.max(...user[0].halls.map((hall) => +hall.id)) + 1);
+            history.push("/createhall/" + newHallId)
+          }}>Add Hall</button>
+          <div className="halls-container">
+            {user[0].halls.map(({ adress, hallname, title, id }) =>
+              <div className="hall-container">
+                <div className="hall-name">{hallname}</div>
+                <div className="movie-title">{title}</div>
+                <div className="hall-adress">{adress}</div>
+                <button onClick={() => history.push("/edithall/" + id)}>Edit hall</button>
+                <button onClick={() => deletehall(id)}>Delete hall</button>
+              </div>
+            )}
           </div>
-        )}
-      </div>
-      </>}
+        </>}
     </>
   )
 
