@@ -112,15 +112,10 @@ function Crudtheatre() {
   useEffect(() => {
     getusers();
   }, []);
-  if (user[0] === undefined || user[0].username !== username || password !== user[0].password) {
-    return (
-      <>
-        Invalid credentials
-      </>
-    )
-  }
   return (
     <>
+    {(user[0] === undefined || user[0].username !== username || password !== user[0].password)
+    ?"Invalid credentials" :<>
       <input type="text" placeholder="Hall name" onChange={(event) => setnewHallname(event.target.value)} />
       <input type="text" placeholder="Running movie name" onChange={(event) => setnewTitle(event.target.value)} />
       <input type="text" placeholder="Address of the hall" onChange={(event) => setnewAdress(event.target.value)} />
@@ -139,6 +134,7 @@ function Crudtheatre() {
           </div>
         )}
       </div>
+      </>}
     </>
   )
 
