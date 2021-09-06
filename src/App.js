@@ -73,7 +73,7 @@ function Admin() {
     <>
       <input type="text" placeholder="user name ..." onChange={(event) => setUsername(event.target.value)} />
       <input type="text" placeholder="password ..." onChange={(event) => setPassword(event.target.value)} />
-      <button className="pointer" onClick={() => { buttonText === "Login" ? history.push("/crudtheatre") : "" }}>
+      <button className="pointer" onClick={() =>  buttonText === "Login" ? history.push("/crudtheatre") : "" }>
         {buttonText}</button>
       <div>{buttonText === "Login" ? "New user ?" : "Already existing user ?"}</div>
       <div onClick={() => setButtonText(buttonText === "Login" ? "sign up" : "Login")}>
