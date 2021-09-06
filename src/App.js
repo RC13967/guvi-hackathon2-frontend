@@ -66,12 +66,19 @@ function Home() {
 
 }
 function Admin() {
+  const history = useHistory();
+  const [buttonText, setButtonText] = useState("Login");
   const { setUsername, setPassword } = useContext(moviescontext);
   return (
     <>
       <input type="text" placeholder="user name ..." onChange={(event) => setUsername(event.target.value)} />
       <input type="text" placeholder="password ..." onChange={(event) => setPassword(event.target.value)} />
-      <Link to="crudtheatre"><button className="pointer">Login</button></Link>
+      <button className="pointer" onClick={() => { buttonText === "Login" ? history.push("/crudtheatre") : "" }}>
+        {buttonText}</button>
+      <div>{buttonText === "Login" ? "New user ?" : "Already existing user ?"}</div>
+      <div onClick={() => setButtonText(buttonText === "Login" ? "sign up" : "Login")}>
+        {buttonText === "Login" ? "sign up" : "Login"}
+      </div>
 
     </>
   )
@@ -100,11 +107,13 @@ function Crudtheatre() {
   }
   return (
     <>
-      <input type="text" placeholder= "Hall name" onChange={(event) => setnewHallname(event.target.value)} />
-      <input type="text" placeholder= "Running movie name" onChange={(event) => setnewTitle(event.target.value)} />
-      <input type="text" placeholder= "Address of the hall" onChange={(event) => setnewAdress(event.target.value)} />
-      <button onClick={() => { setnewHallId(Math.max(...user[0].halls.map((hall)=> +hall.id)) + 1 );
-        history.push("/createhall/" + newHallId)}}>Add Hall</button>
+      <input type="text" placeholder="Hall name" onChange={(event) => setnewHallname(event.target.value)} />
+      <input type="text" placeholder="Running movie name" onChange={(event) => setnewTitle(event.target.value)} />
+      <input type="text" placeholder="Address of the hall" onChange={(event) => setnewAdress(event.target.value)} />
+      <button onClick={() => {
+        setnewHallId(Math.max(...user[0].halls.map((hall) => +hall.id)) + 1);
+        history.push("/createhall/" + newHallId)
+      }}>Add Hall</button>
       <div className="halls-container">
         {user[0].halls.map(({ adress, hallname, title, id }) =>
           <div className="hall-container">
@@ -159,7 +168,7 @@ function Edithall() {
   )
 }
 function Createhall() {
-  const { username, newHallname,newAdress,newTitle } = useContext(moviescontext);
+  const { username, newHallname, newAdress, newTitle } = useContext(moviescontext);
   const { id } = useParams();
   fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/edithall/${id}`, {
     method: "PUT",
@@ -169,9 +178,9 @@ function Createhall() {
     body: JSON.stringify({ hallname: newHallname, adress: newAdress, title: newTitle, username: username })
   })
     .then((data) => data.json())
-    return(
-      <Link to = "/crudtheatre">Hall list</Link>
-    )
+  return (
+    <Link to="/crudtheatre">Hall list</Link>
+  )
 }
 function Client() {
   const history = useHistory();
