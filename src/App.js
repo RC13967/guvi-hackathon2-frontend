@@ -68,12 +68,23 @@ function Home() {
 function Admin() {
   const history = useHistory();
   const [buttonText, setButtonText] = useState("Login");
-  const { setUsername, setPassword } = useContext(moviescontext);
+  const { username, password, setUsername, setPassword } = useContext(moviescontext);
+  function adduser() {
+    fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/addUser`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ username: username, password:password, halls:[] })
+    })
+      .then((data) => data.json())
+  }
   return (
     <>
       <input type="text" placeholder="user name ..." onChange={(event) => setUsername(event.target.value)} />
       <input type="text" placeholder="password ..." onChange={(event) => setPassword(event.target.value)} />
-      <button className="pointer" onClick={() =>  buttonText === "Login" ? history.push("/crudtheatre") : "" }>
+      <button className="pointer" onClick={() =>  
+        buttonText === "Login" ? (history.push("/crudtheatre")) : (adduser() , history.push("/crudtheatre")) }>
         {buttonText}</button>
       <div>{buttonText === "Login" ? "New user ?" : "Already existing user ?"}</div>
       <div onClick={() => setButtonText(buttonText === "Login" ? "sign up" : "Login")}>
@@ -84,6 +95,7 @@ function Admin() {
   )
 
 }
+
 function Crudtheatre() {
   const [newHallId, setnewHallId] = useState(0);
   const history = useHistory();
@@ -98,7 +110,7 @@ function Crudtheatre() {
   useEffect(() => {
     getusers();
   }, []);
-  if (user[0] === undefined || user[0].halls === undefined || password !== user[0].password) {
+  if (user[0] === undefined || user[0].username !== username || password !== user[0].password) {
     return (
       <>
         Invalid credentials
