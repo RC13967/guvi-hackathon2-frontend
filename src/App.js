@@ -70,7 +70,6 @@ function Admin() {
   const [buttonText, setButtonText] = useState("Login");
   const { username, password, setUsername, setPassword, setUser } = useContext(moviescontext);
   function adduser() {
-
     fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/addUser`, {
       method: "POST",
       headers: {
@@ -104,9 +103,8 @@ function Crudtheatre() {
   const history = useHistory();
   const { username, password, user, setUser, setnewHallname, setnewTitle, setnewAdress } = useContext(moviescontext);
   function getusers() {
-    fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/user`, {
-      method: "GET",
-      body: JSON.stringify({ username: username, password:password })
+    fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/users/${username}`, {
+      method: "GET"
     })
       .then((data) => data.json())
       .then((userdata) => setUser(userdata));
