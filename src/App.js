@@ -78,14 +78,15 @@ function Admin() {
       body: JSON.stringify({ username: username, password:password, halls:[] })
     })
       .then((data) => data.json())
-      .then((userdata) => setUser(userdata));
+      .then((userdata) => setUser(userdata))
+      .then(()=> history.push("/crudtheatre"))
   }
   return (
     <>
       <input type="text" placeholder="user name ..." onChange={(event) => setUsername(event.target.value)} />
       <input type="text" placeholder="password ..." onChange={(event) => setPassword(event.target.value)} />
       <button className="pointer" onClick={() =>  
-        buttonText === "Login" ? (history.push("/crudtheatre")) : (adduser() , history.push("/crudtheatre")) }>
+        buttonText === "Login" ? history.push("/crudtheatre") : adduser()  }>
         {buttonText}</button>
       <div>{buttonText === "Login" ? "New user ?" : "Already existing user ?"}</div>
       <div onClick={() => setButtonText(buttonText === "Login" ? "sign up" : "Login")}>
