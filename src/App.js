@@ -78,6 +78,7 @@ function Admin() {
   }
   useEffect(() => {
     getusers();
+    // eslint-disable-next-line
   }, [username]);
   function adduser() {
     fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/addUser`, {
@@ -125,6 +126,7 @@ function Crudtheatre() {
   }
   useEffect(() => {
     getusers();
+     // eslint-disable-next-line
   }, []);
   return (
     <>
