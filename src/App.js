@@ -96,12 +96,12 @@ function Admin() {
     <>
       <input type="text" placeholder="user name ..." onChange={(event) => setUsername(event.target.value)} />
       <div>
-        {user[0] !== undefined && user[0].username === username && buttonText === "sign up" ? "user already exists" : ""}
+        {user[0] !== undefined  && buttonText === "sign up" ? "user already exists" : ""}
       </div>
       <input type="text" placeholder="password ..." onChange={(event) => setPassword(event.target.value)} />
       <button className="pointer" onClick={() =>
         buttonText === "Login" ? history.push("/crudtheatre") :
-        user[0] !== undefined && user[0].username === username ? adduser() : ""}>
+        user[0] !== undefined   ? "" : adduser() }>
         {buttonText}</button>
       <div>{buttonText === "Login" ? "New user ?" : "Already existing user ?"}</div>
       <div onClick={() => setButtonText(buttonText === "Login" ? "sign up" : "Login")}>
