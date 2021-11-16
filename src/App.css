@@ -2,13 +2,47 @@ body {
   background-color: rgb(216, 222, 224);
   margin: 1.5rem;
 }
+.container{
+  margin-top: 1rem;
+}
+.nav-links{
+  display: flex;
+  justify-content: space-around;
+}
+.nav-link{
+  color: rgb(248, 247, 247);
+  font-size: large;
+  text-decoration: none;
+  margin: 0rem 1rem;
+}
+.logOut-link{
+  color: aliceblue;
+}
+.logOut-link:hover{
+cursor: pointer;
+color: rgb(216, 222, 224);
+}
+.home-header{
+  font-size :xx-large;
+  font-weight: 800;
+}
+.home-content{
+  font-size:larger;
+  font-weight: 500;
+  color: rgb(0, 190, 190);
+}
+.input{
+  padding: 0.5rem;
+  margin: 0.5rem;
+}
+.errors{
+  color: red;
+}
 .link{
     text-decoration: none;
-    color: black;
 }
-button{
-    
-    cursor: pointer;
+.button{
+    margin: 0.3rem;
 }
 .movies-container {
   display: flex;
@@ -21,21 +55,115 @@ button{
   max-width: 180px;
   text-align: center;
   padding-top: 0.5rem;
+  border: 1px solid rgb(173, 173, 173);
+}
+.date{
+  color: rgba(219, 0, 0, 0.815);
+  font-weight: 700;
 }
 img {
   width: 150px;
   border-radius: 8px;
 }
 .halls-container{
-  margin: auto;
   display: flex;
-  flex-direction: column;
-  width: fit-content;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 1rem;
   gap: 1rem;
 }
 .hall-container{
   background-color: white;
-  padding: 1rem;
   border-radius: 8px;
-  
+  text-align: center;
+  padding-top: 0.5rem;
+  border: 1px solid rgb(173, 173, 173);
+}
+.movie-halls-container{
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+  gap: 1rem;
+}
+.movie-hall-container{
+  background-color: white;
+  border-radius: 8px;
+  padding: 0.5rem;
+  border: 1px solid rgb(99, 99, 99);
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+}
+.or{
+  color: black;
+  font-weight: 800;
+  font-size: larger;
+}
+.hall-name{
+  font-size: 1.5rem;
+  color: rgb(69, 109, 0);
+  font-weight: 700;
+}
+.hall-adress{
+  font-weight: 700;
+  color: rgb(131, 0, 124);
+}
+.movie-id{
+  font-weight: 700;
+  color: crimson;
+}
+.movie-title{
+  font-size: larger;
+  color: rgb(147, 0, 167);
+  font-weight: 700;
+}
+.movie-genre{
+  font-weight: bold;
+}
+.flex {
+  display: flex;
+}
+.dates{
+  display: flex;
+  gap: 1.5rem;
+}
+.show-times{
+  display: flex;
+  justify-content: space-evenly;
+}
+.seats-page{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.seats{
+  display: grid;
+  grid-template-columns: repeat(11,1fr);
+  margin-bottom: 1rem;
+}
+.seat:hover{
+  cursor: pointer;
+}
+.columns{
+  font-weight: 700;
+  font-size:x-large;
+  margin-bottom: 1rem;
+  color: rgb(0, 101, 148);
+}
+.seat-numbers{
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.seat-number{
+  background-color: rgb(0, 0, 179);
+  font-weight: 700;
+  color: rgb(245, 238, 238);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+.seatnumbers{
+  font-weight: 700;
+}
+.show-time{
+  font-weight: 800;
+  font-size: larger;
 }

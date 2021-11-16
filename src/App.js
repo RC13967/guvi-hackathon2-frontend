@@ -1,50 +1,151 @@
 import './App.css';
-import { Link, Route, Switch, useParams } from "react-router-dom";
-import { createContext, useContext, useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
-const moviescontext = createContext(null);
+import { Link, Route, Switch, useHistory } from "react-router-dom";
+import { createContext, useContext, useState, useEffect } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Container, Navbar, Nav, NavDropdown } from 'react-bootstrap';
+import { Admin, AddAdmin, ActivateAdmin, ForgotAdmin, OpenedEmailAdmin } from './Admin';
+import { Client, AddClient, ActivateClient, ForgotClient, OpenedEmailClient } from './Client';
+import { CrudTheatre, Edithall, Createhall, BookedData } from './CrudTheatre';
+import { ShowMovies, BookTickets, SelectSeats, SelectPaymentMethod } from './BookTickets';
+import { UpdateMovie, ShowTimings } from './UpdateMovie';
+export const moviescontext = createContext(null);
 function App() {
-  const [movies, setMovies] = useState([]);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [user, setUser] = useState([]);
-  const [newAdress, setnewAdress] = useState("");
-  const [newTitle, setnewTitle] = useState("");
-  const [newHallname, setnewHallname] = useState("");
+  const [admin, setAdmin] = useState("");
+  const [client, setClient] = useState([]);
+  const [email, setEmail] = useState("");
+  const [theatre, setTheatre] = useState([]);
+  const [movie, setMovie] = useState([]);
+  const [hall, setHall] = useState([]);
+  const [show, setShow] = useState([]);
+  const [bookingDate, setBookingDate] = useState("");
+  const [bookedSeats, setBookedSeats] = useState([]);
+  const [newBookedSeats, setNewBookedSeats] = useState([]);
+  const [blockedHalls, setBlockedHalls] = useState([]);
+  const [blockedSeats, setBlockedSeats] = useState([]);
   return (
     <>
       <moviescontext.Provider value={{
-        movies: movies, setMovies: setMovies,
-        username: username, setUsername: setUsername, password: password, setPassword: setPassword,
-        user: user, setUser: setUser, newAdress: newAdress, newHallname: newHallname, newTitle: newTitle,
-        setnewAdress: setnewAdress, setnewHallname: setnewHallname, setnewTitle: setnewTitle
+        admin: admin, setAdmin: setAdmin, client: client, setClient: setClient, email: email, setEmail: setEmail,
+        theatre: theatre, setTheatre: setTheatre, movie:movie, setMovie:setMovie, hall:hall, setHall:setHall,
+        show:show, setShow:setShow, bookingDate, setBookingDate,bookedSeats:bookedSeats, setBookedSeats:setBookedSeats,
+         newBookedSeats:newBookedSeats, setNewBookedSeats:setNewBookedSeats, blockedSeats, setBlockedSeats,
+         blockedHalls:blockedHalls, setBlockedHalls: setBlockedHalls
       }}>
-        <Routes />
+        <Navigation />
       </moviescontext.Provider>
-
     </>
   );
+}
+function Navigation() {
+  const history = useHistory();
+  const { setAdmin, setClient, admin, client } = useContext(moviescontext);
+  const Admin = localStorage.getItem('Admin');
+  const Client = localStorage.getItem('Client');
+  useEffect(() => {
+    setAdmin(Admin);
+    setClient(Client)
+  }, [Admin, Client]);
+  function clearAdmin() {
+    localStorage.setItem('Admin', '');
+    setAdmin('');
+    alert("Thanks for visiting");
+    history.push("/")
+  }
+  function clearClient() {
+    localStorage.setItem('Client', '');
+    alert("Thanks for visiting");
+    setClient('');
+    history.push("/")
+  }
+  return (
+    <>
+      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Container>
+          <Navbar.Brand href="/">Tickets Free</Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="me-auto">
+              <Link to="/showMovies" className="nav-link">Book tickets</Link>
+            </Nav>
+            <Nav>
+              <Link to="/loginAdmin" className="nav-link">Admin login</Link>
+              <Link to="/loginClient" className="nav-link">Client login</Link>
+              {admin || client ?
+                <NavDropdown title="log out" id="collasible-nav-dropdown">
+                  {admin ?
+                    <NavDropdown.Item to="/" onClick={() => clearAdmin()}>Admin logout</NavDropdown.Item> : ""}
+                  {client ?
+                    <NavDropdown.Item to="/" onClick={() => clearClient()}>Client logout</NavDropdown.Item> : ""}
+                </NavDropdown> : ""}
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+
+      <Routes />
+
+    </>
+  )
 }
 function Routes() {
   return (
     <Switch>
-      <Route path="/admin">
+      <Route path="/loginAdmin">
         <Admin />
       </Route>
-      <Route path="/client">
-        <Client />
+      <Route path="/signUpAdmin">
+        <AddAdmin />
       </Route>
-      <Route path="/book/:title">
-        <Bookticket />
+      <Route path="/activateAdmin/:email/:token">
+        <ActivateAdmin />
       </Route>
-      <Route path="/crudtheatre">
-        <Crudtheatre />
+      <Route path="/forgotAdmin">
+        <ForgotAdmin />
       </Route>
-      <Route path="/edithall/:id">
+      <Route path="/retrieveAdmin/:email/:token">
+        <OpenedEmailAdmin />
+      </Route>
+      <Route path="/crudTheatre">
+        <CrudTheatre />
+      </Route>
+      <Route path="/bookedData">
+        <BookedData />
+      </Route>
+      <Route path="/updateMovie">
+        <UpdateMovie/>
+      </Route>
+      <Route path="/showTimings">
+        <ShowTimings/>
+      </Route>
+      <Route path="/edithall">
         <Edithall />
       </Route>
-      <Route path="/createhall/:id">
-        <Createhall />
+      <Route path="/loginClient">
+        <Client />
+      </Route>
+      <Route path="/signUpClient">
+        <AddClient />
+      </Route>
+      <Route path="/activateClient/:email/:token">
+        <ActivateClient />
+      </Route>
+      <Route path="/forgotClient">
+        <ForgotClient />
+      </Route>
+      <Route path="/retrieveClient/:email/:token">
+        <OpenedEmailClient />
+      </Route>
+      <Route path="/showMovies">
+        <ShowMovies />
+      </Route>
+      <Route path="/bookTickets">
+        <BookTickets />
+      </Route>
+      <Route path="/selectSeats">
+        <SelectSeats />
+      </Route>
+      <Route path="/selectPaymentMethod">
+        <SelectPaymentMethod />
       </Route>
       <Route path="/">
         <Home />
@@ -54,194 +155,12 @@ function Routes() {
 }
 function Home() {
   return (
-    <>
-      <div>
-        <Link to="/admin">Admin</Link>
-      </div>
-      <div>
-        <Link to="/client">Client</Link>
-      </div>
-    </>
-  )
-
-}
-function Admin() {
-  const history = useHistory();
-  const [buttonText, setButtonText] = useState("Login");
-  const { username, password, setUsername, setPassword, user, setUser } = useContext(moviescontext);
-  function getusers() {
-    fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/users/${username}`, {
-      method: "GET"
-    })
-      .then((data) => data.json())
-      .then((userdata) => setUser(userdata));
-  }
-  useEffect(() => {
-    getusers();
-    // eslint-disable-next-line
-  }, [username]);
-  function adduser() {
-    fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/addUser`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ username: username, password: password, halls: [] })
-    })
-      .then((data) => data.json())
-      .then((userdata) => setUser(userdata))
-      .then(() => history.push("/crudtheatre"))
-  }
-  return (
-    <>
-      <input type="text" placeholder="user name ..." onChange={(event) => setUsername(event.target.value)} />
-      <div>
-        {user[0] !== undefined  && buttonText === "sign up" ? "user already exists" : ""}
-      </div>
-      <input type="text" placeholder="password ..." onChange={(event) => setPassword(event.target.value)} />
-      <button className="pointer" onClick={() =>
-        buttonText === "Login" ? history.push("/crudtheatre") :
-        user[0] !== undefined   ? "" : adduser() }>
-        {buttonText}</button>
-      <div>{buttonText === "Login" ? "New user ?" : "Already existing user ?"}</div>
-      <div onClick={() => setButtonText(buttonText === "Login" ? "sign up" : "Login")}>
-        {buttonText === "Login" ? "sign up" : "Login"}
-      </div>
-
-    </>
-  )
-
-}
-
-function Crudtheatre() {
-  const [newHallId, setnewHallId] = useState(0);
-  const history = useHistory();
-  const { username, password, user, setUser, setnewHallname, setnewTitle, setnewAdress } = useContext(moviescontext);
-  function getusers() {
-    fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/users/${username}`, {
-      method: "GET"
-    })
-      .then((data) => data.json())
-      .then((userdata) => setUser(userdata));
-  }
-  useEffect(() => {
-    getusers();
-     // eslint-disable-next-line
-  }, []);
-  return (
-    <>
-      {(user[0] === undefined || user[0].username !== username || password !== user[0].password)
-        ? "Invalid credentials" : <>
-          <input type="text" placeholder="Hall name" onChange={(event) => setnewHallname(event.target.value)} />
-          <input type="text" placeholder="Running movie name" onChange={(event) => setnewTitle(event.target.value)} />
-          <input type="text" placeholder="Address of the hall" onChange={(event) => setnewAdress(event.target.value)} />
-          <button onClick={() => {
-            setnewHallId(Math.max(...user[0].halls.map((hall) => +hall.id)) + 1);
-            history.push("/createhall/" + newHallId)
-          }}>Add Hall</button>
-          <div className="halls-container">
-            {user[0].halls.map(({ adress, hallname, title, id }) =>
-              <div className="hall-container">
-                <div className="hall-name">{hallname}</div>
-                <div className="movie-title">{title}</div>
-                <div className="hall-adress">{adress}</div>
-                <button onClick={() => history.push("/edithall/" + id)}>Edit hall</button>
-                <button onClick={() => deletehall(id)}>Delete hall</button>
-              </div>
-            )}
-          </div>
-        </>}
-    </>
-  )
-
-  function deletehall(id) {
-    fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/hall/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ username: username })
-    })
-      .then((data) => data.json())
-      .then(() => getusers())
-  }
-}
-
-function Edithall() {
-  const { user, username } = useContext(moviescontext);
-  const { id } = useParams();
-  let [{ adress, hallname, title }] = user[0].halls.filter((hall) => hall.id === id);
-  const [Adress, setAdress] = useState(adress);
-  const [Title, setTitle] = useState(hallname);
-  const [Hallname, setHallname] = useState(title);
-
-  fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/edithall/${id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ hallname: Hallname, adress: Adress, title: Title, username: username })
-  })
-    .then((data) => data.json())
-
-  return (
-    <div>
-      <input type="text" placeholder={Hallname} onChange={(event) => setHallname(event.target.value)} />
-      <input type="text" placeholder={Title} onChange={(event) => setTitle(event.target.value)} />
-      <input type="text" placeholder={Adress} onChange={(event) => setAdress(event.target.value)} />
-      <Link to="/crudtheatre">Updated list</Link>
-    </div>
-  )
-}
-function Createhall() {
-  const { username, newHallname, newAdress, newTitle } = useContext(moviescontext);
-  const { id } = useParams();
-  fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/edithall/${id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ hallname: newHallname, adress: newAdress, title: newTitle, username: username })
-  })
-    .then((data) => data.json())
-  return (
-    <Link to="/crudtheatre">Hall list</Link>
-  )
-}
-function Client() {
-  const history = useHistory();
-  const { movies, setMovies } = useContext(moviescontext);
-  function getmovies() {
-    fetch("https://guvi-hackathon2-ranjith.herokuapp.com/movies", {
-      method: "GET"
-    })
-      .then((data) => data.json())
-      .then((moviesdata) => setMovies(moviesdata));
-  }
-  useEffect(() => {
-    getmovies();
-  });
-
-  return (
-    <div className="movies-container" >
-      {movies.map(({ poster, title, genres }) =>
-        <div className="movie-card" >
-          <img src={poster} alt="" />
-          <div className="movie-title">{title}</div>
-          <div className="movie-genre">{genres}</div>
-          <button className="pointer" onClick={() => history.push("/book/" + title)}>Book</button>
-
-        </div>
-      )}
-    </div>
-  )
-}
-function Bookticket() {
-  const { movies } = useContext(moviescontext);
-  const { title } = useParams();
-  const movie = movies.filter((obj) => obj.title = title)
-  return (
-    <div>{movie.genres}</div>
+    <Container >
+      <div className="home-header">Welcome!!!</div>
+      <div className="home-content">To book movie tickets, click on "book tickets".</div>
+      <div className="home-content">If you are client, click on "Client" to login.</div>
+      <div className="home-content">If you are theatre admin, click on "Admin" to add theatre.</div>
+    </Container>
   )
 }
 export default App;
