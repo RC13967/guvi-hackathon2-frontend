@@ -132,6 +132,7 @@ export function AddClient() {
   });
   useEffect(() => {
     checkEmail();
+     // eslint-disable-next-line
   }, [formik.values.email]);
   return (
     <Container className="container">

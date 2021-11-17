@@ -22,6 +22,7 @@ export function CrudTheatre() {
   };
   useEffect(() => {
     getHalls();
+     // eslint-disable-next-line
   }, []);
   function checkHall(details) {
     fetch("https://guvi-hackathon2-ranjith.herokuapp.com/checkHall", {
@@ -32,8 +33,8 @@ export function CrudTheatre() {
       },
     })
       .then((data) => data.json())
-      .then((userdata) => userdata.message === "This hall details is available" ?
-        (setMessage("waiting"), addHall(details)) : setMessage(userdata.message))
+      .then((userdata) => userdata.message !== "This hall details is available" ? setMessage(userdata.message)
+       : (setMessage("waiting"), addHall(details)))
   };
   function addHall(details) {
     fetch("https://guvi-hackathon2-ranjith.herokuapp.com/addHall", {
@@ -108,7 +109,7 @@ export function CrudTheatre() {
           {hall.movie ? <>
             <div className="movie-id">Movie id: {hall.movie.id}</div>
             <div className="movie-title">{hall.movie.title}</div>
-          <img className="movie-poster" src = {hall.movie.poster} />
+          <img className="movie-poster" src = {hall.movie.poster}  alt = ""/>
           <div className="movie-date">{hall.movie.releaseDate}</div>
           <div className="movie-genre">{hall.movie.genres.length <=1 ? hall.movie.genres :
         hall.movie.genres.map((genre)=><span>{genre}, </span>)}</div>
@@ -126,7 +127,6 @@ export function CrudTheatre() {
 }
 export function BookedData(){
   const [shows, setShows] = useState([]);
-  const [time, setTime] = useState("");
   const [bookedDetails, setBookedDetails] = useState([]);
   const {theatre} = useContext(moviescontext);
   console.log(shows)
@@ -163,8 +163,8 @@ export function Edithall() {
       },
     })
       .then((data) => data.json())
-      .then((userdata) => userdata.message === "This hall details is available" ?
-        (setMessage("waiting"), updateHall(details)) : setMessage(userdata.message))
+      .then((userdata) => userdata.message !== "This hall details is available" ?
+          setMessage(userdata.message) : (setMessage("waiting"), updateHall(details)))
   };
   function updateHall(details) {
     fetch("https://guvi-hackathon2-ranjith.herokuapp.com/updateHall", {

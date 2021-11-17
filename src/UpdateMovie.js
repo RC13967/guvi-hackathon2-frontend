@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { Container, Spinner, Button } from 'react-bootstrap';
+import { Container, Button } from 'react-bootstrap';
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { moviescontext } from './App';

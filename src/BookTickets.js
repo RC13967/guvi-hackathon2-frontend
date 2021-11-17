@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { moviescontext } from './App';
@@ -79,6 +79,7 @@ export function BookTickets() {
   }
   useEffect(() => {
     if (movie) getHalls();
+     // eslint-disable-next-line
   }, []);
   return (
     <Container>
@@ -97,7 +98,7 @@ export function BookTickets() {
             <div className="hall-adress">Address: {hall.adress}</div>
           </div>
           <div className="show-times">{hall.movie.showTimes ?
-            hall.movie.showTimes.filter((show) => show.date == bookingDate)[0]
+            hall.movie.showTimes.filter((show) => show.date === bookingDate)[0]
               .showTimes.map((show) => <Button variant="info"
                 onClick={() => findBlockedSeats(hall, show)} >{show.time}</Button>)
             : ""}
@@ -109,7 +110,7 @@ export function BookTickets() {
 }
 export function SelectSeats() {
   const history = useHistory();
-  const { hall, setShow, show, movie, bookingDate, bookedSeats, setBookedSeats, blockedSeats, setBlockedSeats,
+  const { hall, show, movie, bookingDate, bookedSeats, setBookedSeats, setBlockedSeats,
     blockedHalls, newBookedSeats, setNewBookedSeats } = useContext(moviescontext);
   const [seats, setSeats] = useState([]);
   const [click, setClick] = useState(true);
@@ -146,7 +147,7 @@ export function SelectSeats() {
   useEffect(() => {
     let tempBlocked = [];
     blockedHalls.map((obj) => obj.hall.movie.showTimes.filter((show) =>
-      show.date == bookingDate)[0].showTimes.map((Show) => Show.time === show.time ?
+      show.date === bookingDate)[0].showTimes.map((Show) => Show.time === show.time ?
         Show.bookingDetails.map((elem) =>
           tempBlocked.push(...elem.seats)) : ""))
     setBlockedSeats(tempBlocked)
@@ -161,13 +162,13 @@ export function SelectSeats() {
       for (let j = 1; j < 11; j++) {
         seatsDetails.push({
           "number": columns[j] + rows[i],
-          "color": bookedseats.indexOf(columns[j] + rows[i]) == -1 && tempBlocked.indexOf(columns[j] + rows[i]) == -1
+          "color": bookedseats.indexOf(columns[j] + rows[i]) === -1 && tempBlocked.indexOf(columns[j] + rows[i]) === -1
             ? "grey" : "green"
         })
       };
     };
     setSeats(seatsDetails);
-
+ // eslint-disable-next-line
   }, []);
   return (
     <Container className="seats-page">
@@ -210,7 +211,7 @@ export function SelectSeats() {
 export function SelectPaymentMethod() {
   const history = useHistory();
   const [message, setMessage] = useState("");
-  const { bookingDate, hall, bookedSeats, newBookedSeats, setClient, movie, client, show } = useContext(moviescontext);
+  const { bookingDate, hall, bookedSeats, newBookedSeats, setClient, movie,show } = useContext(moviescontext);
   const [countDown, setCountDown] = useState("");
   function bookSeats() {
     fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/bookSeats`, {
@@ -279,6 +280,7 @@ export function SelectPaymentMethod() {
   });
   useEffect(() => {
     startTimer(180);
+     // eslint-disable-next-line
   }, []);
   function handleClick() {
     if (!Client) {

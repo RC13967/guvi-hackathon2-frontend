@@ -129,6 +129,7 @@ export function AddAdmin() {
   });
   useEffect(() => {
     checkEmail();
+     // eslint-disable-next-line
   }, [formik.values.email]);
   return (
     <Container>

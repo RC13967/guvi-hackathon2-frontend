@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import { Admin, AddAdmin, ActivateAdmin, ForgotAdmin, OpenedEmailAdmin } from './Admin';
 import { Client, AddClient, ActivateClient, ForgotClient, OpenedEmailClient } from './Client';
-import { CrudTheatre, Edithall, Createhall, BookedData } from './CrudTheatre';
+import { CrudTheatre, Edithall, BookedData } from './CrudTheatre';
 import { ShowMovies, BookTickets, SelectSeats, SelectPaymentMethod } from './BookTickets';
 import { UpdateMovie, ShowTimings } from './UpdateMovie';
 export const moviescontext = createContext(null);
@@ -44,6 +44,7 @@ function Navigation() {
   useEffect(() => {
     setAdmin(Admin);
     setClient(Client)
+     // eslint-disable-next-line
   }, [Admin, Client]);
   function clearAdmin() {
     localStorage.setItem('Admin', '');
