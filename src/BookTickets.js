@@ -59,7 +59,8 @@ export function BookTickets() {
       },
     })
       .then((data) => data.json())
-      .then((hallsData) => setMovieHalls(hallsData), setMessage("data fetched"));
+      .then((hallsData) => setMovieHalls(hallsData))
+      .then(()=>setMessage("data fetched"))
   }
   function findBlockedSeats(hall, show) {
     fetch("https://guvi-hackathon2-ranjith.herokuapp.com/getBlockedSeats", {
