@@ -44,7 +44,7 @@ function Navigation() {
   useEffect(() => {
     setAdmin(Admin);
     setClient(Client)
-     // eslint-disable-next-line
+    // eslint-disable-next-line
   }, [Admin, Client]);
   function clearAdmin() {
     localStorage.setItem('Admin', '');
