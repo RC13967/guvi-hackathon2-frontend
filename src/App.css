@@ -128,7 +128,7 @@ img {
 }
 .seats-page{
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
 }
 .seats{
   display: grid;
@@ -162,4 +162,16 @@ img {
 .show-time{
   font-weight: 800;
   font-size: x-large;
+}
+@media(min-width:730px)
+{
+  .seats-page{
+    grid-template-columns: 9fr 3fr;
+  }
+}
+@media(min-width:1100px)
+{
+  .seats-page{
+    grid-template-columns: 7fr 5fr;
+  }
 }
