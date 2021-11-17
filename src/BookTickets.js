@@ -311,11 +311,14 @@ export function SelectPaymentMethod() {
         {formik.touched.password && formik.errors.password ? (
           <div className="errors">{formik.errors.password}</div>
         ) : ("")}<br />
-        <Link to="/forgotClient" className="link"> Forgot password? </Link><br />
+        <Link to="/forgotClient" className="link" 
+        target="_blank" rel="noopener noreferrer"> Forgot password? </Link><br />
         <Button variant="success" type="submit">Login</Button>
       </form>
-        <Button variant="primary" className="centre-button" onClick={() => history.push('/signUpClient')}>
-          Create Account</Button></> : ""}</>}
+      <Link to="/signUpClient" className="link" 
+        target="_blank" rel="noopener noreferrer"> <Button variant="primary" className="centre-button" >
+        Create Account</Button>
+         </Link><br /></> : ""}</>}
       <div className="movie-title">Movie Name: {movie.title}</div>
       <div className="show-time">booking date: {bookingDate}</div>
       <div className="show-time">show time: {show.time}</div>
