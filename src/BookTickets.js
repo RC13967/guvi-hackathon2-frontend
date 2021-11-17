@@ -41,6 +41,7 @@ export function BookTickets() {
   const { movie, setHall, setShow, bookingDate, setBookingDate,
     setBlockedHalls } = useContext(moviescontext);
   const [movieHalls, setMovieHalls] = useState([]);
+  const [message, setMessage] = useState("");
   // var dates = [];
   // var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   // for (let i = 0; i < 6; i++) {
@@ -58,7 +59,7 @@ export function BookTickets() {
       },
     })
       .then((data) => data.json())
-      .then((hallsData) => setMovieHalls(hallsData));
+      .then((hallsData) => setMovieHalls(hallsData), setMessage("data fetched"));
   }
   function findBlockedSeats(hall, show) {
     fetch("https://guvi-hackathon2-ranjith.herokuapp.com/getBlockedSeats", {
@@ -103,7 +104,7 @@ export function BookTickets() {
                 onClick={() => findBlockedSeats(hall, show)} >{show.time}</Button>)
             : ""}
           </div>
-        </div>) : ""}
+        </div>) : message==="data fetched" ? "No halls available":""}
       </div>
     </Container>
   );
