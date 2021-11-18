@@ -25,6 +25,7 @@ export function CrudTheatre() {
      // eslint-disable-next-line
   }, []);
   function checkHall(details) {
+    setMessage("waiting");
     fetch("https://guvi-hackathon2-ranjith.herokuapp.com/checkHall", {
       method: "POST",
       body: JSON.stringify(details),
@@ -34,7 +35,7 @@ export function CrudTheatre() {
     })
       .then((data) => data.json())
       .then((userdata) => userdata.message !== "This hall details is available" ? setMessage(userdata.message)
-       : (setMessage("waiting"), addHall(details)))
+       :  addHall(details))
   };
   function addHall(details) {
     fetch("https://guvi-hackathon2-ranjith.herokuapp.com/addHall", {
@@ -91,14 +92,10 @@ export function CrudTheatre() {
         <Button variant="primary" type="submit">Add Hall</Button>
       </form>
       <div className="errors">{message === "This hall details is not available. Try another" ? message : ""}</div>
-      <div className="errors">{message === "waiting" ?
+      {message === "waiting" ?
         <Spinner animation="border" role="status">
           <span className="visually-hidden">Loading...</span>
-        </Spinner> : ""}</div>
-        {!message ?<Spinner animation="border" role="status">
-        <span className="visually-hidden">Loading...</span>
-      </Spinner> :<>
-        {message === "got halls" ?
+        </Spinner> : ""}
       <div className="halls-container">
         {halls.length > 0 ? (halls.map((hall) => <div className="hall-container">
           <div className="hall-name">Theatre name: {hall.hallname}</div>
@@ -123,9 +120,11 @@ export function CrudTheatre() {
           </>  : ""}
           
         </div>
-        )) : "No halls registered"}
-      </div>:""}</>}
-
+        )) : ""}
+      </div>
+      {message === "waiting" ? <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner> : ""}
     </Container>
   );
 }
