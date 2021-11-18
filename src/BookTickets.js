@@ -23,16 +23,20 @@ export function ShowMovies() {
   }, []);
 
   return (
-    <Container className="movies-container">
+    <Container className="movies-container">{moviesList.length > 0 ? <>
       {moviesList.map((film) => <div className="movie-card">
         <img src={film.poster} alt="" />
         <div className="movie-title">{film.title}</div>
         <div className="date">Release date: {new Date(film.release_date).toLocaleString().slice(0, 9)}</div>
         <div className="movie-genre">{film.genres.length <= 1 ? film.genres :
-          film.genres.map((genre) => <span>{genre}, </span>)}</div>
-        <Button variant="success" onClick={() => { history.push("/bookTickets/"); setMovie(film) }}>Book</Button>
+          film.genres.map((genre) => <span>{genre}, </span>)}</div><br/><br/>
+        <Button variant="success" className = "align-bottom"
+        onClick={() => { history.push("/bookTickets/"); setMovie(film) }}>Book</Button>
       </div>
-      )}
+      )}</> :
+      <Spinner animation="border" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </Spinner>}
     </Container>
   );
 }
@@ -60,7 +64,7 @@ export function BookTickets() {
     })
       .then((data) => data.json())
       .then((hallsData) => setMovieHalls(hallsData))
-      .then(()=>setMessage("data fetched"))
+      .then(() => setMessage("data fetched"))
   }
   function findBlockedSeats(hall, show) {
     fetch("https://guvi-hackathon2-ranjith.herokuapp.com/getBlockedSeats", {
@@ -81,10 +85,12 @@ export function BookTickets() {
   }
   useEffect(() => {
     if (movie) getHalls();
-     // eslint-disable-next-line
+    // eslint-disable-next-line
   }, []);
   return (
-    <Container>
+    <Container>{message === "display seats" ? <Spinner animation="border" role="status">
+    <span className="visually-hidden">Loading...</span>
+  </Spinner>:<>
       <img src={movie.poster} alt="" />
       <div className="movie-title">{movie.title}</div>
       <div className="movie-title">{new Date(movie.release_date).toISOString()}</div>
@@ -94,19 +100,22 @@ export function BookTickets() {
       <div className="dates">{dates.map((date) =>
         <Button variant="secondary" onClick={() => setBookingDate(date)}>{date}</Button>)}</div><hr />
       <div className="movie-halls-container">
-        {movieHalls.length > 0 ? movieHalls.map((hall) => <div className="movie-hall-container">
-          <div>
-            <div className="hall-name">Theatre: {hall.hallname}</div>
-            <div className="hall-adress">Address: {hall.adress}</div>
-          </div>
-          <div className="show-times">{hall.movie.showTimes ?
-            hall.movie.showTimes.filter((show) => show.date === bookingDate)[0]
-              .showTimes.map((show) => <Button variant="info"
-                onClick={() => findBlockedSeats(hall, show)} >{show.time}</Button>)
-            : ""}
-          </div>
-        </div>) : message==="data fetched" ? "No halls available":""}
-      </div>
+        {!message ? <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner> : <>
+          {movieHalls.length > 0 ? movieHalls.map((hall) => <div className="movie-hall-container">
+            <div>
+              <div className="hall-name">Theatre: {hall.hallname}</div>
+              <div className="hall-adress">Address: {hall.adress}</div>
+            </div>
+            <div className="show-times">{hall.movie.showTimes ?
+              hall.movie.showTimes.filter((show) => show.date === bookingDate)[0]
+                .showTimes.map((show) => <Button variant="info"
+                  onClick={() => {findBlockedSeats(hall, show); setMessage("display seats")}} >{show.time}</Button>)
+              : ""}
+            </div>
+          </div>) : "No halls available"}</>}
+      </div></>}
     </Container>
   );
 }
@@ -170,7 +179,7 @@ export function SelectSeats() {
       };
     };
     setSeats(seatsDetails);
- // eslint-disable-next-line
+    // eslint-disable-next-line
   }, []);
   return (
     <Container className="seats-page">
@@ -213,7 +222,7 @@ export function SelectSeats() {
 export function SelectPaymentMethod() {
   const history = useHistory();
   const [message, setMessage] = useState("");
-  const { bookingDate, hall, bookedSeats, newBookedSeats, setClient, movie,show } = useContext(moviescontext);
+  const { bookingDate, hall, bookedSeats, newBookedSeats, setClient, movie, show } = useContext(moviescontext);
   const [countDown, setCountDown] = useState("");
   function bookSeats() {
     fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/bookSeats`, {
@@ -226,7 +235,7 @@ export function SelectPaymentMethod() {
         "Content-Type": "application/json",
       },
     })
-    .then((data) => data.status === 200 ? setMessage("booking success"): setMessage("booking failed"))
+      .then((data) => data.status === 200 ? setMessage("booking success") : setMessage("booking failed"))
   }
   function getClient(details) {
     fetch(`https://guvi-hackathon2-ranjith.herokuapp.com/getClient`, {
@@ -282,7 +291,7 @@ export function SelectPaymentMethod() {
   });
   useEffect(() => {
     startTimer(180);
-     // eslint-disable-next-line
+    // eslint-disable-next-line
   }, []);
   function handleClick() {
     if (!Client) {
@@ -295,40 +304,40 @@ export function SelectPaymentMethod() {
   }
   return (
     <Container>
-      {message==="booking success" ? "Booking successfull. Details sent to email." :
-      message==="booking failed" ? "Booking failed. Please check your connection / try again." :<>
-      {message==="waiting2" ? <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>:<>{message ==="waiting" ? <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>:<>
-      {!Client ? <> <form onSubmit={formik.handleSubmit}>
-        <input className="input" placeholder="Email" type="email" name="email"
-          onChange={formik.handleChange} value={formik.values.email} />
-        {formik.touched.email && formik.errors.email ? (
-          <div className="errors">{formik.errors.email}</div>
-        ) : ("")}<br />
-        <input className="input" placeholder="Password" type="password" name="password"
-          onChange={formik.handleChange} value={formik.values.password} />
-        {formik.touched.password && formik.errors.password ? (
-          <div className="errors">{formik.errors.password}</div>
-        ) : ("")}<br />
-        <Link to="/forgotClient" className="link" 
-        target="_blank" rel="noopener noreferrer"> Forgot password? </Link><br />
-        <Button variant="success" type="submit">Login</Button>
-      </form>
-      <Link to="/signUpClient" className="link" 
-        target="_blank" rel="noopener noreferrer"> <Button variant="primary" className="centre-button" >
-        Create Account</Button>
-         </Link><br /></> : ""}</>}
-      <div className="movie-title">Movie Name: {movie.title}</div>
-      <div className="show-time">booking date: {bookingDate}</div>
-      <div className="show-time">show time: {show.time}</div>
-      <div className="seatnumbers">Seats: {newBookedSeats}</div>
-      <div className="hall-name">Theatre: {hall.hallname}</div>
-      <div className="hall-adress">theatre address: asdfg{hall.adress}</div>
-      <Button variant="warning" onClick={() => handleClick()}>{countDown}</Button></>}
-</>}
+      {message === "booking success" ? "Booking successfull. Details sent to email." :
+        message === "booking failed" ? "Booking failed. Please check your connection / try again." : <>
+          {message === "waiting2" ? <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner> : <>{message === "waiting" ? <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner> : <>
+            {!Client ? <> <form onSubmit={formik.handleSubmit}>
+              <input className="input" placeholder="Email" type="email" name="email"
+                onChange={formik.handleChange} value={formik.values.email} />
+              {formik.touched.email && formik.errors.email ? (
+                <div className="errors">{formik.errors.email}</div>
+              ) : ("")}<br />
+              <input className="input" placeholder="Password" type="password" name="password"
+                onChange={formik.handleChange} value={formik.values.password} />
+              {formik.touched.password && formik.errors.password ? (
+                <div className="errors">{formik.errors.password}</div>
+              ) : ("")}<br />
+              <Link to="/forgotClient" className="link"
+                target="_blank" rel="noopener noreferrer"> Forgot password? </Link><br />
+              <Button variant="success" type="submit">Login</Button>
+            </form><br/>
+              <Link to="/signUpClient" className="link"
+                target="_blank" rel="noopener noreferrer"> <Button variant="primary" className="centre-button" >
+                  Create Account</Button>
+              </Link><br /></> : ""}</>}<br/>
+            <div className="movie-title">Movie Name: {movie.title}</div>
+            <div className="show-time">booking date: {bookingDate}</div>
+            <div className="show-time">show time: {show.time}</div>
+            <div className="seatnumbers">Seats: {newBookedSeats}</div>
+            <div className="hall-name">Theatre: {hall.hallname}</div>
+            <div className="hall-adress">theatre address: asdfg{hall.adress}</div>
+            <Button variant="warning" onClick={() => handleClick()}>{countDown}</Button></>}
+        </>}
     </Container>
   )
 }

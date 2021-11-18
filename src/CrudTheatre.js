@@ -18,7 +18,7 @@ export function CrudTheatre() {
       },
     })
       .then((data) => data.json())
-      .then((hallsData) => { setHalls(hallsData); setMessage("") })
+      .then((hallsData) => { setHalls(hallsData); setMessage("got halls") })
   };
   useEffect(() => {
     getHalls();
@@ -95,6 +95,10 @@ export function CrudTheatre() {
         <Spinner animation="border" role="status">
           <span className="visually-hidden">Loading...</span>
         </Spinner> : ""}</div>
+        {!message ?<Spinner animation="border" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </Spinner> :<>
+        {message === "got halls" ?
       <div className="halls-container">
         {halls.length > 0 ? (halls.map((hall) => <div className="hall-container">
           <div className="hall-name">Theatre name: {hall.hallname}</div>
@@ -119,8 +123,8 @@ export function CrudTheatre() {
           </>  : ""}
           
         </div>
-        )) : ""}
-      </div>
+        )) : "No halls registered"}
+      </div>:""}</>}
 
     </Container>
   );
