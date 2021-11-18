@@ -6,7 +6,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 export function CrudTheatre() {
   const [halls, setHalls] = useState([]);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState('waiting');
   const history = useHistory();
   const { admin, setTheatre } = useContext(moviescontext);
   function getHalls() {
