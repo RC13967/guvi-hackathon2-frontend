@@ -42,7 +42,8 @@ export function UpdateMovie() {
 
         }),
         onSubmit: (details) => {
-            addMovie(details);
+            if (error !== "please start the next show only after current show is finished (maintain atleast an hour gap)"
+            && error !== "dont run two shows at same time") addMovie(details);
         },
     });
     return (
@@ -82,11 +83,14 @@ export function UpdateMovie() {
                 {formik.touched.genres && formik.errors.genres ? (
                     <div className="errors">{formik.errors.genres}</div>
                 ) : ("")}<br />
-                {elements.map((element, index) => (
+                {elements.map((element, index) => <>
                     <ShowTimings elements={elements} setElements={setElements} times={times}
                         setTimes={setTimes} id={index} setError={setError} error={error} />
-                ))}
+                         </>
+                )}
+               {times.map((time) => <div>{time}</div>)}
                 <Button variant="primary" type="submit">Add movie</Button>
+                <div className="errors">{error}</div>
             </form>
             <div className="home-header">OR</div>
             <li className="home-content">Add a movie from existing list</li></ol>
@@ -158,6 +162,45 @@ function ExistingMovie({ admin, theatre, error, setError }) {
 }
 export function ShowTimings({ elements, times, setElements, setTimes, id, error, setError }) {
     const [time, setTime] = useState("");
+    function findError(){
+        if (error !== "please search the movie name to display movies"
+        && error !== "please add show timings" ){
+        if ([...times]
+             .sort(
+                 (a, b) =>
+                     Number(b.slice(0, 2)) * 60 +
+                     Number(b.slice(3, 5)) -
+                     (Number(a.slice(0, 2)) * 60 + Number(a.slice(3, 5)))
+             )
+             .filter((time) =>
+                 times.filter(
+                     (element) =>
+                         Number(time.slice(0, 2)) * 60 +
+                         Number(time.slice(3, 5)) -
+                         (Number(element.slice(0, 2)) * 60 +
+                             Number(element.slice(3, 5))) <
+                         60 &&
+                         Number(time.slice(0, 2)) * 60 +
+                         Number(time.slice(3, 5)) -
+                         (Number(element.slice(0, 2)) * 60 +
+                             Number(element.slice(3, 5))) >
+                         0
+                 ).length > 0
+             ).length <= 0) {
+ 
+            if (times.map((time)=>times.filter((el)=>el===time).length > 1).indexOf(true) !==-1 ){
+            return "dont run two shows at same time"
+            }
+            else return ""
+         }
+         return "please start the next show only after current show is finished (maintain atleast an hour gap)"
+        }
+        return error
+     }
+    useEffect(()=>{
+        setError(findError());
+        // eslint-disable-next-line
+    }, [times])
     return (
         <div>
             <input
@@ -193,7 +236,7 @@ export function ShowTimings({ elements, times, setElements, setTimes, id, error,
                 ""
             )}
             {error !== "please search the movie name to display movies"
-                && error !== "please add show timings" ?
+                && error !== "please add show timings"   ?
                 ([...times]
                     .sort(
                         (a, b) =>
@@ -215,9 +258,14 @@ export function ShowTimings({ elements, times, setElements, setTimes, id, error,
                                     Number(element.slice(3, 5))) >
                                 0
                         ).length > 0
-                    ).length > 0 ?
-                    setError("please start the next show only after current show is finished (maintain atleast an hour gap)")
-                    : setError("")) : ""}
+                    ).length <= 0 ?
+                    (times.map((time)=>times.filter((el)=>el===time).length > 1).indexOf(true) ===-1 ?
+                    ""
+                    :setError("dont run two shows at same time")
+                     )
+                    :setError("please start the next show only after current show is finished (maintain atleast an hour gap)")
+                    
+                     ) : ""}
         </div>
     );
 }
